@@ -1,0 +1,14 @@
+{
+    "name": "argovaerts/Hookless",
+    "description": "A one time or recurring trigger? Hookless calls your back at the precise time you want.",
+    "require": {
+        "peppeocchi/php-cron-scheduler": "^3.0",
+        "nikic/fast-route": "^1.3",
+        "simple-crud/simple-crud": "^7.4",
+        "phpmailer/phpmailer": "^6.1",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {"Hookless\\": "src/"}
+    }
+}

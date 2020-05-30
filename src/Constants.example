@@ -1,0 +1,10 @@
+<?php
+namespace Hookless;
+
+interface Constants {
+    const MAIL_HOST     = '';
+    const MAIL_USER     = '';
+    const MAIL_PASSWORD = '';
+    const MAIL_PORT     = 587;
+    const MAIL_FROM     = ['hello@example.com', 'Example.com'];
+}

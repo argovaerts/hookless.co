@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hookless - Signing in</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="images/icons/safari-pinned-tab.svg" color="#f6f8fa">
+    <link rel="shortcut icon" href="images/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="msapplication-config" content="images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#f6f8fa">
+    
+    <link rel="canonical" href="https://hookless.co">
+    <meta name="description" content="Hookless, just schedule your jobs">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:url" content="https://hookless.co">
+    <meta property="og:title" content="Hookless, just schedule your jobs">
+    <meta property="og:description" content="A one time or recurring trigger? Hookless calls your back at the precise time you want.">
+
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+    {
+        "@type": "Question",
+        "name": "What can Hookless do?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A one time or recurring trigger? Hookless calls your back at the precise time you want."
+        }
+    },{
+        "@type": "Question",
+        "name": "How to get started?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sign in and grab an API key and make your calls."
+        }
+    },{
+        "@type": "Question",
+        "name": "What does it cost?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This is just a one man operation and I like to keep things simple: $0.000002 per job run, billed at the end of each month. <p>You can find the source code on Github btw."
+        }
+    },{
+        "@type": "Question",
+        "name": "Who made this anyway?",
+        "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hi! My name is Arne Govaerts. I'm an indiehacker and indieweb enthousiast."
+        }
+    }]
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Hookless, just schedule your jobs</h1>
+    </header>
+    <main>
+        <section>
+            <h2>What can Hookless do?</h2>
+            <p>A one time or recurring trigger? Hookless calls your back at the precise time you want.</p>
+        </section>
+        <section>
+            <h2>How to get started?</h2>
+            <p>The setup is simple.</p>
+            <ol>
+                <li>
+                    <details open="open">
+                        <summary>
+                            Sign in and grab an API key.
+                        </summary>
+                        <form method="POST">
+                            <label for="code">Code sended by email</label>
+                            <input type="text" name="code" id="code" required="required">
+                            <input type="hidden" name="email" value="{{email}}">
+                            <input type="submit" value="Sign in">
+                        </form>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>
+                            And make your calls.
+                        </summary>
+                        <h4>Get own user details</h4>
+                        <pre><code>curl -X GET 
+  'https://hookless.co/user' 
+  -H 'X-KEY: &#x3C;YOUR API KEY&#x3E;'</code></pre>
+                        <h4>Change user details</h4>
+                        <p>In order to use the API, you need to add at least your first name, last name, address, postal code, town and country.</p>
+                        <pre><code>curl -X POST 
+  'https://hookless.co/user' 
+  -H 'X-KEY: &#x3C;YOUR API KEY&#x3E;' 
+  -d '{
+    "email":&#x3C;required string&#x3E;,
+    "first_name":&#x3C;required string&#x3E;,
+    "last_name":&#x3C;required string&#x3E;,
+    "company":&#x3C;optional string&#x3E;,
+    "vat_number":&#x3C;optional string&#x3E;,
+    "address":&#x3C;required string&#x3E;,
+    "postal_code":&#x3C;required string&#x3E;,
+    "town":&#x3C;required string&#x3E;,
+    "country":&#x3C;required string&#x3E;
+  }'</code></pre>
+                        <h4>Add a new job</h4>
+                        <p>A job can either run a single time or be recurring.</p>
+                        <p>To add a one time job:</p>
+                        <pre><code>curl -X POST 
+  'https://hookless.co/job' 
+  -H 'X-KEY: &#x3C;YOUR API KEY&#x3E;' 
+  -d '{
+    "run_at":"&#x3C;date string e.g. 2020-01-01 12:20&#x3E;",
+    "request_type":"&#x3C;POST or GET&#x3E;"
+    "webhook":"&#x3C;URL of the target&#x3E;",
+    "payload": &#x3C;Both multipart and JSON can be fired. See below.&#x3E;,
+    "is_multipart":&#x3C;boolean&#x3E;
+  }'</code></pre>
+                        <p>To add a recurring job:</p>
+                        <pre><code>curl -X POST 
+  'https://hookless.co/job' 
+  -H 'X-KEY: &#x3C;YOUR API KEY&#x3E;' 
+  -d '{
+    "run_every":"&#x3C;moment e.g. 5 minutes. See below.&#x3E;",
+    "request_type":"&#x3C;POST or GET&#x3E;"
+    "webhook":"&#x3C;URL of the target&#x3E;",
+    "payload": &#x3C;Both multipart and JSON can be fired. See below.&#x3E;,
+    "is_multipart":&#x3C;boolean&#x3E;
+  }'</code></pre>
+<h4>Get own user details</h4>
+                        <pre><code>curl -X GET 
+  'https://hookless.co/user' 
+  -H 'X-KEY: &#x3C;YOUR API KEY&#x3E;'</code></pre>
+                        <h4>Show all your jobs</h4>
+                        <pre><code>curl -X GET 
+  'https://hookless.co/job' 
+  -H 'X-KEY: &#x3C;YOUR API KEY&#x3E;'</code></pre>
+                        <h4>Show job details</h4>
+                        <pre><code>curl -X GET 
+  'https://hookless.co/job/&#x3C;job id&#x3E;' 
+  -H 'X-KEY: &#x3C;YOUR API KEY&#x3E;'</code></pre>
+                    </details>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>What does it cost?</h2>
+            <p>This is just a one man operation and I like to keep things simple: <b> &dollar;0.000002 per job run</b>, billed at the end of each month.</p>
+            <p>You can find <a href="https://github.com/argovaerts/hookless.co">the source code</a> on Github btw.</p>
+        </section>
+        <section>
+            <h2>Who made this anyway?</h2>
+            <p>Hi! My name is <a href="https://q4.re">Arne Govaerts</a>. I'm an indiehacker and indieweb enthousiast.</p>
+        </section>
+    </main>
+
+    <script>
+        if (navigator.serviceWorker && !navigator.serviceWorker.controller) {
+            navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
+                console.log('Service Worker registered successfully.');
+            }).catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+        } 
+    </script>
+</body>
+</html>
